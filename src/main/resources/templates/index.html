@@ -36,8 +36,8 @@
 			t: moment(data[i].date, dateFormat),
 			y: data[i].value
 		});
-    	
-    	
+    	console.log(moment(data[i].date.valueOf(), dateFormat));
+    	labels.push(moment(data[i].date.valueOf(), dateFormat));
 
     }
     console.log(dataChart);
@@ -69,11 +69,16 @@
 		options: {
 			scales: {
 				xAxes: [{
-					type: 'time',
-					distribution: 'series',
-					ticks: {
-						source: 'labels'
-					}
+				    type: "time",
+			        time: {
+			                    displayFormats: {
+			                        quarter: 'YYYY-MM-DD'
+			                    }
+			        },
+			        ticks: {
+			          minRotation: 90,
+			          source:'labels'
+			        }
 				}],
 				yAxes: [{
 					scaleLabel: {
