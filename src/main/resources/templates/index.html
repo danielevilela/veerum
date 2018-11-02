@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Financial Report</title>
+
+   	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+	<script src="http://www.chartjs.org/dist/2.7.3/Chart.js"></script>
+	<script src="http://www.chartjs.org/samples/latest/utils.js"></script>
+	<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	</style>
+</head>
+<body>
+<div style="width:1000px">
+		<canvas id="chart1"></canvas>
+</div>
+
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    var data = /*[[${schedule}]]*/ 'default';
+    console.log(data);
+    var dataChart = [];
+    var dateFormat = 'YYYY-MM-DD';
+	var date = moment('2018-11-01', dateFormat);
+	var labels = [date];
+	
+    for(i = 0; i< data.length; i++){
+    	dataChart.push({
+			t: moment(data[i].date, dateFormat),
+			y: data[i].value
+		});
+    	
+    	
+
+    }
+    console.log(dataChart);
+    
+
+	
+
+	var ctx = document.getElementById('chart1').getContext('2d');
+	ctx.canvas.width = 1000;
+	ctx.canvas.height = 300;
+
+	var color = Chart.helpers.color;
+	var cfg = {
+		type: 'bar',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'Veerum - Report',
+				backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.red,
+				data: dataChart,
+				type: 'line',
+				pointRadius: 0,
+				fill: false,
+				lineTension: 0,
+				borderWidth: 2
+			}]
+		},
+		options: {
+			scales: {
+				xAxes: [{
+					type: 'time',
+					distribution: 'series',
+					ticks: {
+						source: 'labels'
+					}
+				}],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'Closing price ($)'
+					}
+				}]
+			}
+		}
+	};
+	var chart = new Chart(ctx, cfg);
+/*]]>*/
+</script>	
+</body>
+</html>
